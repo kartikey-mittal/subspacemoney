@@ -74,9 +74,9 @@ const Auth = () => {
     setShowPassword(!showPassword);
   };
 
-  // GitHub रेपो को नई टैब में खोलने का फंक्शन
+
   const handleGithubRepoClick = () => {
-    window.open('https://github.com/your-repo-link', '_blank');
+    window.open('https://github.com/kartikey-mittal/subspacemoney', '_blank');
   };
 
   const defaultOptions = {
