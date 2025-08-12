@@ -1,38 +1,227 @@
-.App {
+h1,
+p {
+ 
+}
+/* src/App.css */
+body {
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+.form h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+.input-group {
+  margin-bottom: 1rem;
+}
+.input-group input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.button-group button {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.button-group button:disabled {
+  background-color: #ccc;
+}
+.error-message {
+  color: red;
+  font-size: 0.9rem;
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.success-message {
+  color: green;
+  font-size: 0.9rem;
+  text-align: center;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.loading {
+  font-size: 1.5rem;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.chat-layout {
+  width: 100%;
+  max-width: 800px;
+  height: 90vh;
   display: flex;
   flex-direction: column;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 1rem;
+  background: #007bff;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+.signout-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.chat-area {
+  padding: 1rem;
+  background: white;
+  flex-grow: 1;
+}
+/* src/App.css ke aakhir mein add karein */
+.main-content {
+  display: flex;
+  flex-grow: 1;
+  background: #fff;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+.sidebar {
+  width: 30%;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.new-chat-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.new-chat-button:disabled {
+  background-color: #ccc;
+}
+.chat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+}
+.chat-list-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.chat-list-item:hover {
+  background-color: #f0f0f0;
+}
+.chat-list-item.selected {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+.message-area {
+  width: 70%;
+  padding: 1rem;
+}
+.no-chat-selected {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  height: 100%;
+  color: #888;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.messages-list {
+  list-style-type: none;
+  padding: 1rem;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.message-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+.message-bubble {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 70%;
+}
+.message-item.sent {
+  justify-content: flex-end; /* User's messages on the right */
+}
+.message-item.sent .message-bubble {
+  background-color: #007bff;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.message-item.received {
+  justify-content: flex-start; /* Bot's messages on the left */
+}
+.message-item.received .message-bubble {
+  background-color: #e9e9eb;
+  color: black;
+}
+.message-bubble p {
+  margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* src/App.css ke aakhir mein add karein */
+.message-input-form {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+.message-input-form input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+.message-input-form button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.message-input-form button:disabled {
+  background-color: #aaa;
 }

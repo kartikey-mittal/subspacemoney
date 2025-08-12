@@ -1,17 +1,23 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { NhostClient, NhostReactProvider } from '@nhost/react';
+import { NhostApolloProvider } from '@nhost/react-apollo';
+
+// Nhost client ko configure karein
+const nhost = new NhostClient({
+  subdomain: 'bisvcatrrmemfwvskwkf', // <-- Nhost dashboard se copy karein
+  region: 'ap-south-1'        // <-- Nhost dashboard se copy karein
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <NhostReactProvider nhost={nhost}>
+      <NhostApolloProvider nhost={nhost}>
+        <App />
+      </NhostApolloProvider>
+    </NhostReactProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
