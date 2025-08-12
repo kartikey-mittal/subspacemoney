@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSignInEmailPassword, useSignUpEmailPassword } from '@nhost/react';
 import Lottie from 'react-lottie';
-import { FaSignInAlt, FaUserPlus, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaSignInAlt, FaUserPlus, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGithub } from 'react-icons/fa'; // FaGithub को इंपोर्ट किया गया है
 import * as animationData from '../assets/loading.json';
 
 const Typewriter = ({ messages }) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [speed, setSpeed] = useState(60); // faster typing
+  const [speed, setSpeed] = useState(60);
 
   useEffect(() => {
     const handleType = () => {
       const fullText = messages[currentMessageIndex];
       if (isDeleting) {
         setText(fullText.substring(0, text.length - 1));
-        setSpeed(40); // faster deleting
+        setSpeed(40);
       } else {
         setText(fullText.substring(0, text.length + 1));
         setSpeed(60);
@@ -39,8 +39,8 @@ const Typewriter = ({ messages }) => {
         fontFamily: 'Fira Code, monospace',
         color: '#FFF8DC',
         fontSize: '1rem',
-        cursor: 'default', // non-clickable
-        userSelect: 'none' // can't select text
+        cursor: 'default',
+        userSelect: 'none'
       }}
     >
       {text}
@@ -74,6 +74,11 @@ const Auth = () => {
     setShowPassword(!showPassword);
   };
 
+  // GitHub रेपो को नई टैब में खोलने का फंक्शन
+  const handleGithubRepoClick = () => {
+    window.open('https://github.com/your-repo-link', '_blank');
+  };
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -84,12 +89,12 @@ const Auth = () => {
   };
 
   const typewriterMessages = [
-  "await chatbot.getResponse()",
-  "n8n workflow triggered...",
-  "Webhook received: Processing data...",
-  "POST → Hasura GraphQL mutation running...",
-  "Automation complete ✅"
-];
+    "await chatbot.getResponse()",
+    "n8n workflow triggered...",
+    "Webhook received: Processing data...",
+    "POST → Hasura GraphQL mutation running...",
+    "Automation complete ✅"
+  ];
 
 
   return (
@@ -151,17 +156,17 @@ const Auth = () => {
           fontFamily: 'DM Sans, sans-serif',
         }}>
           <h2 style={{
-  textAlign: 'center',
-  marginBottom: '0.5rem',
-  fontSize: '2.5rem',
-  color: '#D4D4D4',
-  letterSpacing: '0.125rem',
-  fontFamily: 'DM Sans, sans-serif',
-  cursor: 'default', // no hover
-  userSelect: 'none'
-}}>
-  Chatbot
-</h2>
+            textAlign: 'center',
+            marginBottom: '0.5rem',
+            fontSize: '2.5rem',
+            color: '#D4D4D4',
+            letterSpacing: '0.125rem',
+            fontFamily: 'DM Sans, sans-serif',
+            cursor: 'default',
+            userSelect: 'none'
+          }}>
+            Chatbot
+          </h2>
 
           <div style={{ textAlign: 'center', height: '24px', marginBottom: '20px' }}>
             <Typewriter messages={typewriterMessages} />
@@ -175,8 +180,8 @@ const Auth = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 style={{
-                  width: 'calc(100% - 48px)', // Ensures both inputs have same content width
-                  padding: '12px 12px 12px 40px',
+                  width: 'calc(100% - 80px)', // आइकन और पैडिंग के लिए चौड़ाई समायोजित की गई
+                  padding: '12px 40px 12px 40px', // आइकन के लिए बाएं पैडिंग
                   borderRadius: '8px',
                   border: '1px solid #4a4a4a',
                   backgroundColor: '#2C2C34',
@@ -197,7 +202,7 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 style={{
-                  width: 'calc(100% - 80px)', // Ensures both inputs have same content width
+                  width: 'calc(100% - 80px)',
                   padding: '12px 40px 12px 40px',
                   borderRadius: '8px',
                   border: '1px solid #4a4a4a',
@@ -234,6 +239,7 @@ const Auth = () => {
                 onClick={handleSignIn}
                 disabled={isLoading}
                 style={{
+                  flex: 1,
                   padding: '12px 25px',
                   borderRadius: '8px',
                   border: 'none',
@@ -245,6 +251,7 @@ const Auth = () => {
                   transition: 'background-color 0.3s ease, transform 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
                   fontFamily: 'DM Sans, sans-serif',
                 }}
@@ -265,6 +272,7 @@ const Auth = () => {
                 onClick={handleSignUp}
                 disabled={isLoading}
                 style={{
+                  flex: 1,
                   padding: '12px 25px',
                   borderRadius: '8px',
                   border: 'none',
@@ -276,6 +284,7 @@ const Auth = () => {
                   transition: 'background-color 0.3s ease, transform 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
                   fontFamily: 'DM Sans, sans-serif',
                 }}
@@ -295,6 +304,42 @@ const Auth = () => {
                 {isLoading ? '...' : <FaUserPlus />} Sign Up
               </button>
             </div>
+            {/* GitHub Repository Button */}
+            <button
+              onClick={handleGithubRepoClick}
+              style={{
+                width: '100%',
+                padding: '12px 25px',
+                borderRadius: '8px',
+                border: '1px solid #8B8B8D',
+                backgroundColor: 'transparent',
+                color: '#8B8B8D',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                marginTop: '15px',
+                transition: 'background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                fontFamily: 'DM Sans, sans-serif',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.color = '#D4D4D4';
+                e.currentTarget.style.borderColor = '#D4D4D4';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#8B8B8D';
+                e.currentTarget.style.borderColor = '#8B8B8D';
+              }}
+            >
+              <FaGithub style={{ fontSize: '1.2rem' }} /> See Repository
+            </button>
           </form>
           {isSuccess && <p style={{ color: '#4dabf7', textAlign: 'center', fontSize: '0.9rem', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>Please check your email to verify your account.</p>}
         </div>
