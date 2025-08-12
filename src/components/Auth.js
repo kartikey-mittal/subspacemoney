@@ -8,25 +8,24 @@ const Typewriter = ({ messages }) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [speed, setSpeed] = useState(150);
+  const [speed, setSpeed] = useState(60); // faster typing
 
   useEffect(() => {
     const handleType = () => {
       const fullText = messages[currentMessageIndex];
       if (isDeleting) {
         setText(fullText.substring(0, text.length - 1));
-        setSpeed(150);
+        setSpeed(40); // faster deleting
       } else {
         setText(fullText.substring(0, text.length + 1));
-        setSpeed(150);
+        setSpeed(60);
       }
 
       if (!isDeleting && text === fullText) {
-        setTimeout(() => setIsDeleting(true), 1500);
+        setTimeout(() => setIsDeleting(true), 800);
       } else if (isDeleting && text === '') {
         setIsDeleting(false);
         setCurrentMessageIndex((currentMessageIndex + 1) % messages.length);
-        setSpeed(150);
       }
     };
 
@@ -34,7 +33,19 @@ const Typewriter = ({ messages }) => {
     return () => clearTimeout(timer);
   }, [text, isDeleting, speed, messages, currentMessageIndex]);
 
-  return <span style={{ fontFamily: 'Fira Code, monospace', color: '#FFF8DC', fontSize: '1rem' }}>{text}</span>;
+  return (
+    <span
+      style={{
+        fontFamily: 'Fira Code, monospace',
+        color: '#FFF8DC',
+        fontSize: '1rem',
+        cursor: 'default', // non-clickable
+        userSelect: 'none' // can't select text
+      }}
+    >
+      {text}
+    </span>
+  );
 };
 
 const Auth = () => {
@@ -73,11 +84,13 @@ const Auth = () => {
   };
 
   const typewriterMessages = [
-    "await chatbot.getResponse()",
-    "Connecting to the server...",
-    "Querying the knowledge base...",
-    "Thinking... please wait."
-  ];
+  "await chatbot.getResponse()",
+  "n8n workflow triggered...",
+  "Webhook received: Processing data...",
+  "POST → Hasura GraphQL mutation running...",
+  "Automation complete ✅"
+];
+
 
   return (
     <div style={{
@@ -138,15 +151,18 @@ const Auth = () => {
           fontFamily: 'DM Sans, sans-serif',
         }}>
           <h2 style={{
-            textAlign: 'center',
-            marginBottom: '5px',
-            fontSize: '2.5rem',
-            color: '#D4D4D4',
-            letterSpacing: '2px',
-            fontFamily: 'DM Sans, sans-serif',
-          }}>
-            Chatbot
-          </h2>
+  textAlign: 'center',
+  marginBottom: '0.5rem',
+  fontSize: '2.5rem',
+  color: '#D4D4D4',
+  letterSpacing: '0.125rem',
+  fontFamily: 'DM Sans, sans-serif',
+  cursor: 'default', // no hover
+  userSelect: 'none'
+}}>
+  Chatbot
+</h2>
+
           <div style={{ textAlign: 'center', height: '24px', marginBottom: '20px' }}>
             <Typewriter messages={typewriterMessages} />
           </div>

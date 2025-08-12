@@ -39,7 +39,7 @@ const Chat = () => {
 
   const [showFullPageLoader, setShowFullPageLoader] = useState(true);
   const [loadingStartTime, setLoadingStartTime] = useState(Date.now());
-  const MIN_LOAD_DURATION = 5000; // 5 seconds
+  const MIN_LOAD_DURATION = 2500; // 5 seconds
 
   useEffect(() => {
     if (!loading) {
@@ -186,6 +186,7 @@ const Chat = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              fontSize: '1.5rem',
               transition: 'background-color 0.3s ease, transform 0.2s ease',
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
