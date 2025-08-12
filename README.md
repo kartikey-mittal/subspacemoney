@@ -18,6 +18,9 @@ Subspace ChatBOT is a modern, full-stack chat application designed for seamless,
 ### Main Chat Window
 ![Main Chat Window Screenshot](https://i.ibb.co/9kjw6sMv/Screenshot-2025-08-12-230332.png)
 
+### NHost WorkFlow
+![NHost WorkFlow](https://i.ibb.co/mVwGp5bb/Screenshot-2025-08-12-233029.png)
+
 ---
 
 ## 🛠️ Tech Stack & Architecture
