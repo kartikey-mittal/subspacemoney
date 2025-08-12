@@ -40,28 +40,68 @@ const MessagesView = ({ chatId, theme }) => {
   }, [data]);
 
   const themes = {
-    dark: { text: '#D4D4D4', userBubble: '#4dabf7', botBubble: 'rgba(255, 255, 255, 0.05)', error: '#ff6b6b' },
-    light: { text: '#1a1a2e', userBubble: '#007bff', botBubble: '#e9ecef', error: '#dc3545' }
+    dark: { text: '#D4D4D4', userBubble: '#4dabf7', botBubble: 'rgba(255, 255, 255, 0.05)', error: '#ff6b6b', avatarBg: 'rgba(25, 25, 30, 0.7)' },
+    light: { text: '#1a1a2e', userBubble: '#007bff', botBubble: '#e9ecef', error: '#dc3545', avatarBg: 'rgba(224, 224, 224, 0.8)' }
   };
 
-  const currentTheme = themes[theme];
+  const currentTheme = themes?.[theme] || themes.dark; // Fallback to dark theme if currentTheme is undefined
   const botIsTyping = typingData?.messages.length > 0;
+  const avatarImage = 'https://i.ibb.co/7JXxXwmj/image-removebg-preview.png';
 
   return (
     <div style={{ flexGrow: 1, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
       {loading && <p style={{ flexGrow: 1, textAlign: 'center', color: currentTheme.textSecondary, padding: '20px' }}>Loading messages...</p>}
       {error && <p style={{ flexGrow: 1, textAlign: 'center', color: currentTheme.error, padding: '20px' }}>Error: {error.message}</p>}
-      
+
       {data?.messages.map((msg) => (
-        <div key={msg.id} style={{ display: 'flex', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start', animation: 'slideIn 0.5s ease-out' }}>
-          <div style={{ maxWidth: '70%', padding: '12px 20px', borderRadius: '20px', backgroundColor: msg.sender === 'user' ? currentTheme.userBubble : currentTheme.botBubble, color: msg.sender === 'user' ? '#fff' : currentTheme.text, border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`, boxShadow: `0 4px 6px ${theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.1)'}`, animation: 'popIn 0.3s ease-out' }}>
+        <div key={msg.id} style={{ display: 'flex', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-start', animation: 'slideIn 0.5s ease-out' }}>
+          {msg.sender === 'bot' && (
+            <div style={{
+              width: '35px',
+              height: '35px',
+              borderRadius: '50%',
+              backgroundColor: currentTheme.avatarBg,
+              marginRight: '10px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              overflow: 'hidden'
+            }}>
+              <img src={avatarImage} alt="Agent Avatar" style={{ width: '100%', height: '100%', objectFit:'cover' }} />
+            </div>
+          )}
+          <div
+            style={{
+              maxWidth: '70%',
+              padding: '12px 20px',
+              borderRadius: '20px',
+              backgroundColor: msg.sender === 'user' ? currentTheme.userBubble : currentTheme.botBubble,
+              color: msg.sender === 'user' ? '#fff' : currentTheme.text,
+              border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+              boxShadow: `0 4px 6px ${theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.1)'}`,
+              animation: 'popIn 0.3s ease-out'
+            }}
+          >
             {msg.content}
           </div>
         </div>
       ))}
-      
+
       {botIsTyping && (
-        <div style={{ display: 'flex', justifyContent: 'flex-start', animation: 'slideIn 0.5s ease-out' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', animation: 'slideIn 0.5s ease-out' }}>
+          <div style={{
+            width: '35px',
+            height: '35px',
+            borderRadius: '50%',
+            backgroundColor: currentTheme.avatarBg,
+            marginRight: '10px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            overflow: 'hidden'
+          }}>
+            <img src={avatarImage} alt="Agent Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
           <div style={{ maxWidth: '70%', padding: '12px 20px', borderRadius: '20px', backgroundColor: currentTheme.botBubble, border: `1px solid ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`, boxShadow: `0 4px 6px ${theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.1)'}`, fontStyle: 'italic', color: currentTheme.text, display: 'flex', alignItems: 'center' }}>
             <span>Bot is typing</span>
             <span className="typing-dot" style={{marginLeft: '8px'}}></span><span className="typing-dot"></span><span className="typing-dot"></span>
