@@ -1,70 +1,150 @@
-# Getting Started with Create React App
+# Subspace ChatBOT: A Real-Time AI Chat Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Subspace ChatBOT is a modern, full-stack chat application designed for seamless, real-time conversations with an intelligent AI assistant.  
 
-## Available Scripts
+---
 
-In the project directory, you can run:
 
-### `npm start`
+## 🔗 Deployed Link
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**[https://subspacemoney.netlify.app/](https://subspacemoney.netlify.app/)**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
+## 📸 Screenshots
 
-### `npm test`
+### Authentication Page
+![Authentication Page Screenshot](https://i.ibb.co/HTj473Jp/Screenshot-2025-08-12-230409.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Main Chat Window
+![Main Chat Window Screenshot](https://i.ibb.co/9kjw6sMv/Screenshot-2025-08-12-230332.png)
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tech Stack & Architecture
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This project follows a modern, decoupled architecture for scalability and maintainability.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Category       | Technology         | Purpose                                                                 |
+|----------------|-------------------|-------------------------------------------------------------------------|
+| **Frontend**   | React.js          | Component-based, interactive UI                                        |
+|                | Apollo Client     | GraphQL queries, mutations & subscriptions (real-time updates)         |
+|                | Nhost React SDK   | Simplified authentication & session management                         |
+|                | Inline CSS-in-JS  | Component-scoped styling for maintainable UI                            |
+| **Backend**    | Nhost             | BaaS with PostgreSQL, Hasura GraphQL, Authentication & Serverless Funcs|
+|                | GraphQL (Hasura)  | High-performance API layer                                              |
+|                | PostgreSQL        | Relational database for users, chats, messages                          |
+| **Auth**       | Nhost Auth        | JWT-based secure authentication                                         |
+| **Functions**  | Serverless Funcs  | AI bot logic via Hasura Actions                                         |
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🗄️ Database Schema
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. `users` Table  
+Managed automatically by Nhost Auth.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| Column         | Type      | Description                                      |
+|----------------|-----------|--------------------------------------------------|
+| id             | uuid      | Primary key                                      |
+| email          | text      | User email                                       |
+| password_hash  | text      | Securely hashed password                         |
+| created_at     | timestamp | Account creation timestamp                       |
+| default_role   | text      | User role (`user`)                               |
+| is_active      | boolean   | Account activation status                        |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### 2. `chats` Table  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Column     | Type      | Description                                      |
+|------------|-----------|--------------------------------------------------|
+| id         | uuid      | Primary key                                      |
+| user_id    | uuid      | Foreign key → `users.id`                         |
+| created_at | timestamp | Chat session start time                          |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### 3. `messages` Table  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Column     | Type      | Description                                      |
+|------------|-----------|--------------------------------------------------|
+| id         | uuid      | Primary key                                      |
+| chat_id    | uuid      | Foreign key → `chats.id`                         |
+| content    | text      | Message text                                     |
+| sender     | text      | `"user"` or `"bot"`                              |
+| created_at | timestamp | Message timestamp                                |
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ✨ Features
 
-### Making a Progressive Web App
+- 🔐 **Secure User Authentication** with Nhost Auth  
+- ⚡ **Real-Time Messaging** using GraphQL Subscriptions  
+- 🤖 **AI Bot Integration** via Hasura Actions + Serverless Functions  
+- 🗂️ **Multi-Chat History** with persistent storage  
+- 🎨 **Modern Dark UI/UX** with responsive design  
+- ⏱ **Instant Updates** without page refresh  
+- 🛠 **Automated User Verification** (no email verification needed)  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## ⚙️ Architectural Workflow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. **User Authentication**
+   - New user signs up → `users` entry created by Nhost  
+   - Default role = `user` → auto-activated account
 
-### Deployment
+2. **Creating a Chat**
+   - User triggers `insert_chats_one` mutation → New row in `chats` table linked to `user_id`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+3. **Sending a Message**
+   - User sends message → `insert_messages_one` mutation  
+   - Bot Action triggered → Hasura Action calls serverless AI function
 
-### `npm run build` fails to minify
+4. **Bot Response Generation**
+   - Function processes message (e.g., via OpenAI API)  
+   - Inserts bot reply into `messages` table
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+5. **Real-Time UI Update**
+   - Apollo subscription on `messages` table auto-updates UI
+
+---
+
+## 🚀 Getting Started
+
+### **Prerequisites**
+- Node.js & npm (or yarn)
+- Nhost account
+
+---
+
+### **1. Backend Setup (Nhost)**
+
+1. **Create a Project** in Nhost  
+2. **Define Schema** in Hasura:
+   - `chats` table
+   - `messages` table  
+3. **Configure Auth**:
+   - Turn OFF `Require Verified Emails`
+   - Set Default Role → `user`  
+4. **Get Env Vars**:
+   - `NHOST_SUBDOMAIN`
+   - `NHOST_REGION`
+
+---
+
+### **2. Frontend Setup**
+
+```bash
+git clone https://your-repository-url.com/project.git
+cd project
+npm install
+npm start
+```
+
+## 👤 Developer
+
+**Kartikey Mital**
+📧 [g6.kartikey@gmail.com](mailto:g6.kartikey@gmail.com)
+🔗 [LinkedIn](https://linkedin.com/in/kartikey-mittal)
+💻 [GitHub](https://github.com/kartikey-mittal/)
