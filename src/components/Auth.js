@@ -142,7 +142,12 @@ const Auth = () => {
 
   const defaultOptions = { loop: true, autoplay: true, animationData: animationData.default, rendererSettings: { preserveAspectRatio: 'xMidYMid slice' } };
   const typewriterMessages = ["await chatbot.getResponse()", "n8n workflow triggered...", "Webhook received: Processing data...", "POST → Hasura GraphQL mutation running...", "Automation complete ✅"];
-  const snapshotUrls = [ /* ... aapke urls yahan ... */ ];
+    const snapshotUrls = [
+    'https://i.ibb.co/1J9MKwGC/Screenshot-2025-08-13-142615.png',
+    'https://i.ibb.co/8ncCNnJ0/Screenshot-2025-08-13-144809.png',
+    'https://i.ibb.co/k2kZgrFY/Screenshot-2025-08-13-143117.png',
+    'https://i.ibb.co/Lfpffnz/Screenshot-2025-08-13-142808.png'
+  ];
 
   const mainContainerStyle = { display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100vh', width: '100vw', fontFamily: 'DM Sans, sans-serif', background: 'linear-gradient(45deg, #0A0A0A, #15151A, #0A0A0A, #15151A)', backgroundSize: '400% 400%', animation: 'gradientAnimation 15s ease infinite', alignItems: 'center', justifyContent: 'center', color: '#E0E0E0' };
   const lottieContainerStyle = { display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', flex: isMobile ? 'none' : 1, height: isMobile ? '30vh' : '100%', width: isMobile ? '100%' : '50%', backgroundColor: isMobile ? 'transparent' : 'rgba(0, 0, 0, 0.3)' };
