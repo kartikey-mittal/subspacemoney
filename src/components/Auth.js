@@ -52,21 +52,28 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  // State to track if the view is mobile
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  // New state for the initial full-screen loader
+  const [isAppLoading, setIsAppLoading] = useState(true);
 
   const { signUpEmailPassword, isLoading: signUpLoading, isSuccess, isError: signUpError, error: signUpErrorData } = useSignUpEmailPassword();
   const { signInEmailPassword, isLoading: signInLoading, isError: signInError, error: signInErrorData } = useSignInEmailPassword();
 
-  // useEffect to handle window resizing
+  // Effect for the initial application loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsAppLoading(false);
+    }, 1500); // Show loader for 2.5 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Effect to handle window resizing
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup the event listener on component unmount
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -111,10 +118,9 @@ const Auth = () => {
   ];
 
   // --- Dynamic Styles ---
-
   const mainContainerStyle = {
     display: 'flex',
-    flexDirection: isMobile ? 'column' : 'row', // Change direction for mobile
+    flexDirection: isMobile ? 'column' : 'row',
     height: '100vh',
     width: '100vw',
     fontFamily: 'DM Sans, sans-serif',
@@ -131,7 +137,6 @@ const Auth = () => {
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    // Responsive styles
     flex: isMobile ? 'none' : 1,
     height: isMobile ? '30vh' : '100%',
     width: isMobile ? '100%' : '50%',
@@ -141,13 +146,13 @@ const Auth = () => {
   const authContainerStyle = {
     flex: 1,
     display: 'flex',
-    alignItems: isMobile ? 'flex-start' : 'center', // Align form to top on mobile
+    alignItems: isMobile ? 'flex-start' : 'center',
     justifyContent: 'center',
     padding: isMobile ? '0 20px 20px 20px' : '20px',
     width: isMobile ? '100%' : '50%',
     height: isMobile ? '70vh' : '100%',
   };
-  
+
   const formCardStyle = {
     width: '100%',
     maxWidth: '400px',
@@ -167,7 +172,7 @@ const Auth = () => {
   const inputStyle = {
     width: '100%',
     padding: '12px 40px',
-    boxSizing: 'border-box', // Ensure padding is included in the width
+    boxSizing: 'border-box',
     borderRadius: '8px',
     border: '1px solid #4a4a4a',
     backgroundColor: '#2C2C34',
@@ -177,6 +182,26 @@ const Auth = () => {
     transition: 'border-color 0.3s ease',
     fontFamily: 'DM Sans, sans-serif',
   };
+
+  // Conditional return for the full-screen loader
+  if (isAppLoading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: '#000000',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 9999,
+      }}>
+        <Lottie options={defaultOptions} height={200} width={200} />
+      </div>
+    );
+  }
 
   return (
     <div style={mainContainerStyle}>
