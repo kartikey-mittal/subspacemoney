@@ -1,113 +1,58 @@
+// src/components/Auth.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useSignInEmailPassword, useSignUpEmailPassword } from '@nhost/react';
 import Lottie from 'react-lottie';
-import { FaSignInAlt, FaUserPlus, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGithub, FaImage, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa'; // Added new icons
+import { FaSignInAlt, FaUserPlus, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaGithub, FaImage, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import * as animationData from '../assets/loading.json';
 
-// --- Snapshot Modal Component ---
+// --- Snapshot Modal Component (No changes here) ---
 const SnapshotModal = ({ isOpen, onClose, snapshotUrls, isMobile }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef(0);
 
   useEffect(() => {
-    // Reset index when modal is opened
     if (isOpen) {
       setCurrentIndex(0);
     }
-    // Disable body scroll when modal is open
     document.body.style.overflow = isOpen ? 'hidden' : 'auto';
   }, [isOpen]);
 
-  const goToPrevious = () => {
-    setCurrentIndex(currentIndex === 0 ? snapshotUrls.length - 1 : currentIndex - 1);
-  };
+  const goToPrevious = () => setCurrentIndex(currentIndex === 0 ? snapshotUrls.length - 1 : currentIndex - 1);
+  const goToNext = () => setCurrentIndex(currentIndex === snapshotUrls.length - 1 ? 0 : currentIndex + 1);
 
-  const goToNext = () => {
-    setCurrentIndex(currentIndex === snapshotUrls.length - 1 ? 0 : currentIndex + 1);
-  };
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
     const touchEndX = e.changedTouches[0].clientX;
-    if (touchStartX.current - touchEndX > 75) { // Swiped left
-      goToNext();
-    } else if (touchEndX - touchStartX.current > 75) { // Swiped right
-      goToPrevious();
-    }
+    if (touchStartX.current - touchEndX > 75) goToNext();
+    else if (touchEndX - touchStartX.current > 75) goToPrevious();
   };
 
   if (!isOpen) return null;
 
-  // Styles
-  const modalOverlayStyle = {
-    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    zIndex: 10000,
-  };
-  const modalContentStyle = {
-    position: 'relative',
-    backgroundColor: '#19191E',
-    padding: isMobile ? '15px' : '20px',
-    borderRadius: '15px',
-    width: isMobile ? '90vw' : '70vw',
-    maxWidth: '800px',
-    boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    textAlign: 'center',
-    animation: 'zoomIn 0.3s ease-out'
-  };
-  const imageStyle = {
-    width: '100%',
-    height: 'auto',
-    maxHeight: isMobile ? '50vh' : '65vh',
-    objectFit: 'contain',
-    borderRadius: '8px',
-    userSelect: 'none',
-  };
-  const navButtonStyle = {
-    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-    background: 'rgba(255, 255, 255, 0.1)', border: 'none',
-    color: 'white', borderRadius: '50%', width: '40px', height: '40px',
-    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: '1.2rem',
-  };
-  const dotsContainerStyle = {
-    marginTop: '15px',
-    display: 'flex', justifyContent: 'center', gap: '10px'
-  };
-  const dotStyle = {
-    width: '10px', height: '10px', borderRadius: '50%',
-    backgroundColor: 'rgba(255, 255, 255, 0.3)', cursor: 'pointer',
-  };
+  const modalOverlayStyle = { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 };
+  const modalContentStyle = { position: 'relative', backgroundColor: '#19191E', padding: isMobile ? '15px' : '20px', borderRadius: '15px', width: isMobile ? '90vw' : '70vw', maxWidth: '800px', boxShadow: '0 10px 40px rgba(0,0,0,0.5)', border: '1px solid rgba(255, 255, 255, 0.1)', textAlign: 'center', animation: 'zoomIn 0.3s ease-out' };
+  const imageStyle = { width: '100%', height: 'auto', maxHeight: isMobile ? '50vh' : '65vh', objectFit: 'contain', borderRadius: '8px', userSelect: 'none' };
+  const navButtonStyle = { position: 'absolute', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255, 255, 255, 0.1)', border: 'none', color: 'white', borderRadius: '50%', width: '40px', height: '40px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' };
+  const dotsContainerStyle = { marginTop: '15px', display: 'flex', justifyContent: 'center', gap: '10px' };
+  const dotStyle = { width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.3)', cursor: 'pointer' };
   const activeDotStyle = { ...dotStyle, backgroundColor: '#4dabf7' };
 
   return (
     <div style={modalOverlayStyle} onClick={onClose}>
       <style>{`@keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }`}</style>
       <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} style={{ position: 'absolute', top: isMobile ? '10px' : '15px', right: isMobile ? '10px' : '15px', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}>
-          <FaTimes />
-        </button>
-        <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-          <img src={snapshotUrls[currentIndex]} alt={`Snapshot ${currentIndex + 1}`} style={imageStyle} />
-        </div>
+        <button onClick={onClose} style={{ position: 'absolute', top: isMobile ? '10px' : '15px', right: isMobile ? '10px' : '15px', background: 'none', border: 'none', color: 'white', fontSize: '1.5rem', cursor: 'pointer' }}><FaTimes /></button>
+        <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><img src={snapshotUrls[currentIndex]} alt={`Snapshot ${currentIndex + 1}`} style={imageStyle} /></div>
         <button onClick={goToPrevious} style={{ ...navButtonStyle, left: '15px' }}><FaChevronLeft /></button>
         <button onClick={goToNext} style={{ ...navButtonStyle, right: '15px' }}><FaChevronRight /></button>
-        <div style={dotsContainerStyle}>
-          {snapshotUrls.map((_, index) => (
-            <div key={index} style={index === currentIndex ? activeDotStyle : dotStyle} onClick={() => setCurrentIndex(index)}></div>
-          ))}
-        </div>
+        <div style={dotsContainerStyle}>{snapshotUrls.map((_, index) => (<div key={index} style={index === currentIndex ? activeDotStyle : dotStyle} onClick={() => setCurrentIndex(index)}></div>))}</div>
       </div>
     </div>
   );
 };
 
-
+// --- Typewriter Component (No changes here) ---
 const Typewriter = ({ messages }) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [text, setText] = useState('');
@@ -118,11 +63,9 @@ const Typewriter = ({ messages }) => {
     const handleType = () => {
       const fullText = messages[currentMessageIndex];
       if (isDeleting) {
-        setText(fullText.substring(0, text.length - 1));
-        setSpeed(40);
+        setText(fullText.substring(0, text.length - 1)); setSpeed(40);
       } else {
-        setText(fullText.substring(0, text.length + 1));
-        setSpeed(60);
+        setText(fullText.substring(0, text.length + 1)); setSpeed(60);
       }
       if (!isDeleting && text === fullText) {
         setTimeout(() => setIsDeleting(true), 800);
@@ -135,12 +78,9 @@ const Typewriter = ({ messages }) => {
     return () => clearTimeout(timer);
   }, [text, isDeleting, speed, messages, currentMessageIndex]);
 
-  return (
-    <span style={{ fontFamily: 'Fira Code, monospace', color: '#FFF8DC', fontSize: '1rem', cursor: 'default', userSelect: 'none' }}>
-      {text}
-    </span>
-  );
+  return <span style={{ fontFamily: 'Fira Code, monospace', color: '#FFF8DC', fontSize: '1rem', cursor: 'default', userSelect: 'none' }}>{text}</span>;
 };
+
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -148,12 +88,23 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isAppLoading, setIsAppLoading] = useState(true);
-  
-  // State for Snapshot Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { signUpEmailPassword, isLoading: signUpLoading, isSuccess, isError: signUpError, error: signUpErrorData } = useSignUpEmailPassword();
   const { signInEmailPassword, isLoading: signInLoading, isError: signInError, error: signInErrorData } = useSignInEmailPassword();
+
+  // ----- ✨ NEW CODE ADDED HERE ✨ -----
+  // This useEffect hook automatically signs in the user after a successful sign-up.
+  useEffect(() => {
+    // It checks if 'isSuccess' from the signUpEmailPassword hook is true.
+    if (isSuccess) {
+      // If sign-up was successful, it immediately calls the signInEmailPassword function
+      // with the same credentials, creating a seamless login experience.
+      signInEmailPassword(email, password);
+    }
+    // The dependency array ensures this effect only runs when these values change.
+  }, [isSuccess, signInEmailPassword, email, password]);
+  // ----- ✨ END OF NEW CODE ✨ -----
 
   useEffect(() => {
     const timer = setTimeout(() => setIsAppLoading(false), 1500);
@@ -177,11 +128,8 @@ const Auth = () => {
 
   const defaultOptions = { loop: true, autoplay: true, animationData: animationData.default, rendererSettings: { preserveAspectRatio: 'xMidYMid slice' } };
   const typewriterMessages = ["await chatbot.getResponse()", "n8n workflow triggered...", "Webhook received: Processing data...", "POST → Hasura GraphQL mutation running...", "Automation complete ✅"];
-  
-  // !! महत्वपूर्ण: अपने स्क्रीनशॉट के URL यहाँ डालें !!
   const snapshotUrls = [
     'https://i.ibb.co/1J9MKwGC/Screenshot-2025-08-13-142615.png',
-    
     'https://i.ibb.co/8ncCNnJ0/Screenshot-2025-08-13-144809.png',
     'https://i.ibb.co/k2kZgrFY/Screenshot-2025-08-13-143117.png',
     'https://i.ibb.co/Lfpffnz/Screenshot-2025-08-13-142808.png'
@@ -223,10 +171,12 @@ const Auth = () => {
                 <button onClick={handleSignUp} disabled={isLoading} style={{ flex: 1, padding: '12px 25px', borderRadius: '8px', border: 'none', backgroundColor: isLoading ? '#4a4a4a' : '#2F2F37', color: '#D4D4D4', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>{isLoading ? '...' : <FaUserPlus />} Sign Up</button>
               </div>
               <button onClick={handleGithubRepoClick} style={secondaryButtonStyle}><FaGithub style={{ fontSize: '1.2rem' }} /> See Repository</button>
-              {/* New Snapshot Button */}
               <button onClick={() => setIsModalOpen(true)} style={secondaryButtonStyle}><FaImage style={{ fontSize: '1.2rem' }} /> View Snapshots</button>
             </form>
-            {isSuccess && <p style={{ color: '#4dabf7', textAlign: 'center', fontSize: '0.9rem', marginTop: '15px' }}>Please check your email to verify your account.</p>}
+            {/* 
+              I have removed the success message ("Please check your email...") because with auto-login,
+              the user will be redirected immediately, making the message unnecessary.
+            */}
           </div>
         </div>
       </div>
